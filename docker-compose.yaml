@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    image: 'my-wallet-testtask:0.0.1'
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myWalletTestTask
+    depends_on:
+      - w_database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://w_database/banking
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  w_database:
+    image: 'postgres:14.7-alpine'
+    container_name: w_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=banking
